@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from "react-native";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import MealsNavigator from "./src/navigations/MealsNavigator";
+import {enableScreens} from 'react-native-screens'
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -12,6 +13,7 @@ const fetchFonts = () => {
 };
 function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
+  enableScreens()
 
   if (!fontLoaded) {
     return (
@@ -19,6 +21,7 @@ function App() {
         startAsync={fetchFonts}
         onFinish={() => setFontLoaded(true)}
         onError={(e) => console.log(e)}
+        
       />
     );
   }
