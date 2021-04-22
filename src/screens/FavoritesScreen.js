@@ -1,21 +1,31 @@
+import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Text, View,StyleSheet } from "react-native";
+import MealList from "../components/MealList";
+import { MEALS } from "../constants/DummyData";
 
-function FavoritesScreen() {
+function FavoritesScreen(props) {
 
+  const favMeals = MEALS.filter( meal => meal.id === 'm1' || meal.id === 'm2');
   
   return (
-    <View style={styles.screen}>
-      <Text>The Favorites Screen</Text>
-    </View>
+    <MealList listData={favMeals} navigation={props.navigation}/>
   );
 }
 
-const styles= StyleSheet.create({
-  screen:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center',
-  }
-})
+FavoritesScreen.navigationOptions = (navData) => {
+  return {
+    title: "Your Favourites",
+    headerLeft: (
+      <Ionicons
+        name="ios-menu-sharp"
+        onPress={() => navData.navigation.toggleDrawer()}
+        size={25}
+        color="#fff"
+        style={{paddingLeft:20}}
+      />
+    ),
+  };
+};
+
+
 export default FavoritesScreen;

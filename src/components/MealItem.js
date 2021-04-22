@@ -8,10 +8,10 @@ import {
   Dimensions
 } from "react-native";
 
-function MealItem({ title, bgImage, duration, affordability, complexity }) {
+function MealItem({ title, bgImage, duration, affordability, complexity ,onSelect}) {
   return (
     <View style={styles.itemContainer}>
-      <TouchableNativeFeedback>
+      <TouchableNativeFeedback onPress={onSelect}>
         <View>
           <View style={styles.imgContainer}>
             <ImageBackground source={{ uri: bgImage }} style={styles.bgImg}>
@@ -19,9 +19,9 @@ function MealItem({ title, bgImage, duration, affordability, complexity }) {
             </ImageBackground>
           </View>
           <View style={styles.bottomContainer}>
-            <Text>{duration} m</Text>
-            <Text>{complexity.toUpperCase()}</Text>
-            <Text>{affordability.toUpperCase()}</Text>
+            <Text style={styles.bottomText}>{duration} m</Text>
+            <Text style={styles.bottomText}>{affordability.toUpperCase()}</Text>
+            <Text style={styles.bottomText}>{complexity.toUpperCase()}</Text>
           </View>
         </View>
       </TouchableNativeFeedback>
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flexDirection: "row",
+    height:'10%',
     justifyContent: "space-around",
     alignItems: "center",
   },
@@ -59,7 +60,9 @@ const styles = StyleSheet.create({
       color:"#fff",
       textAlign:'center',
       padding:5
-  }
+  },
+  bottomText:{
+      fontFamily:'open-sans'  }
 });
 
 export default MealItem;

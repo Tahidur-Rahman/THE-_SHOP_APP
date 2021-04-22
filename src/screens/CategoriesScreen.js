@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   Text,
@@ -37,8 +38,19 @@ function CategoriesScreen(props) {
   );
 }
 
-CategoriesScreen.navigationOptions = {
-  title: "The Meal App",
+CategoriesScreen.navigationOptions = (navData) => {
+  return {
+    title: "Meal Categories",
+    headerLeft: (
+      <Ionicons
+        name="ios-menu-sharp"
+        onPress={() => navData.navigation.toggleDrawer()}
+        size={25}
+        color="#fff"
+        style={{paddingLeft:20}}
+      />
+    ),
+  };
 };
 
 export default CategoriesScreen;
