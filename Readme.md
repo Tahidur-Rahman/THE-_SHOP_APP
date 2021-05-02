@@ -1,6 +1,6 @@
 
-## The Meal App 
-### React native navigation with Academind
+## The Shop App 
+#### Practical project
 ___
 
 **All the addition :**
