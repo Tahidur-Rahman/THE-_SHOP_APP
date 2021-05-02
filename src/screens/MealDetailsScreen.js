@@ -1,21 +1,35 @@
-import React, { useState } from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
-import { MEALS } from "../constants/DummyData";
 import { FontAwesome } from "@expo/vector-icons";
+import React, { useCallback,useEffect } from "react";
+import { Text, View, StyleSheet, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite } from "../../store/actions/meals";
 
 function MealDetailsScreen(props) {
-  const mealId = props.navigation.getParam("mealId");
-  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+  const selectedMealId = props.navigation.getParam("mealId");
+  const allMeals = useSelector(state => state.meals.meals)
+  const selectedMeal = allMeals.find((meal) => meal.id === selectedMealId);
+
+
+  const disPatch = useDispatch();
+  const toggleFavoriteHandler = useCallback(()=>{
+    disPatch(toggleFavorite(selectedMealId))
+  },[disPatch,selectedMealId])
+
+  useEffect(() => {
+    props.navigation.setParams({
+      toggleFav:toggleFavoriteHandler
+    })
+  }, [toggleFavoriteHandler])
 
   const ListItem = (props) => (
-    <Text style={styles.itemText}>{props.children}</Text>
+    <Text style={styles.itemText}>🔹 {props.children}</Text>
   );
 
   return (
     <ScrollView>
       <View style={styles.screen}>
-        <Image source={{uri:selectedMeal.imageUrl}} style={styles.img} />
+        <Image source={{ uri: selectedMeal.imageUrl }} style={styles.img} />
         <View style={styles.bottomContainer}>
           <Text style={styles.bottomText}>{selectedMeal.duration} m</Text>
           <Text style={styles.bottomText}>
@@ -26,15 +40,19 @@ function MealDetailsScreen(props) {
           </Text>
         </View>
         <View>
-          <Text >Ingredients</Text>
+          <Text style={{ fontFamily: "open-sans-bold", marginVertical: 10 }}>
+            Ingredients
+          </Text>
           {selectedMeal.ingredients.map((item) => (
-            <ListItem>{item}</ListItem>
+            <ListItem key={item}>{item}</ListItem>
           ))}
         </View>
         <View>
-          <Text style={styles.title}>Steps</Text>
+          <Text style={{ fontFamily: "open-sans-bold", marginVertical: 10 }}>
+            Steps
+          </Text>
           {selectedMeal.steps.map((step) => (
-            <ListItem>{step}</ListItem>
+            <ListItem key={step}>{step}</ListItem>
           ))}
         </View>
       </View>
@@ -42,18 +60,18 @@ function MealDetailsScreen(props) {
   );
 }
 
-MealDetailsScreen.navigationOptions = (navigationData) => {
-  const mealId = navigationData.navigation.getParam("mealId");
-  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+MealDetailsScreen.navigationOptions = (navData) => {
+  const title = navData.navigation.getParam("mealTitle");
+  const toggleFav = navData.navigation.getParam('toggleFav');
   return {
-    headerTitle: selectedMeal.title,
+    title: title,
     headerRight: () => (
       <FontAwesome
-        name="star-half-full"
-        size={26}
+        name="star-half-empty"
         color="yellow"
+        size={25}
         style={{ paddingRight: 20 }}
-        onPress={(e) => console.log(e)}
+        onPress={toggleFav}
       />
     ),
   };
@@ -63,8 +81,8 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: "center",
-    width:'100%',
-    padding:10
+    width: "100%",
+    padding: 10,
   },
   bottomText: {
     fontFamily: "open-sans",
@@ -72,14 +90,16 @@ const styles = StyleSheet.create({
 
   bottomContainer: {
     flexDirection: "row",
-    width:'100%',
+    width: "100%",
     justifyContent: "space-around",
     alignItems: "center",
   },
   img: {
     width: "100%",
-    height: 200
+    height: 200,
   },
-  
+  itemText: {
+    fontFamily: "open-sans",
+  },
 });
 export default MealDetailsScreen;

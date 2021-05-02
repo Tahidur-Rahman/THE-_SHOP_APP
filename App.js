@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+
+import MealsNavigator from "./src/navigations/MealsNavigator";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
-import MealsNavigator from "./src/navigations/MealsNavigator";
 import { enableScreens } from "react-native-screens";
-
-import { createStore, combineReducers } from "redux";
-import mealsReducer from "./src/store/reducers/meals";
+import { combineReducers, createStore } from "redux";
+import mealsReducer from "./store/reducers/meals";
 import { Provider } from "react-redux";
 
 const rootReducer = combineReducers({
@@ -20,15 +20,16 @@ const fetchFonts = () => {
     "open-sans-bold": require("./src/assets/Fonts/OpenSans-Bold.ttf"),
   });
 };
+
 function App() {
-  const [fontLoaded, setFontLoaded] = useState(false);
+  const [fontIsLoaded, setFontIsLoaded] = useState(false);
   enableScreens();
 
-  if (!fontLoaded) {
+  if (!fontIsLoaded) {
     return (
       <AppLoading
         startAsync={fetchFonts}
-        onFinish={() => setFontLoaded(true)}
+        onFinish={() => setFontIsLoaded(true)}
         onError={(e) => console.log(e)}
       />
     );

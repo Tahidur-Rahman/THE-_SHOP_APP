@@ -1,100 +1,92 @@
-import React from "react";
 import { createStackNavigator } from "react-navigation-stack";
+import CategoriesScreen from "../Screens/CategoriesScreen";
+import CategoryMealsScreen from "../Screens/CategoryMealsScreen";
+import MealDetailsScreen from "../Screens/MealDetailsScreen";
+import React from 'react'
 import { createAppContainer } from "react-navigation";
-import CategoriesScreen from "../screens/CategoriesScreen";
-import CategoryMealsScreen from "../screens/CategoryMealsScreen";
-import MealDetailsScreen from "../screens/MealDetailsScreen";
 import Colors from "../constants/Colors";
+import FavoriteMealsScreen from "../Screens/FavoriteMealsScreen";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
-import FavoritesScreen from "../screens/FavoritesScreen";
 import { Ionicons } from "@expo/vector-icons";
+import FilterScreen from "../Screens/FilterScreen";
 import { createDrawerNavigator } from "react-navigation-drawer";
-import FiltersScreen from "../screens/FiltersScreen";
 
-const defaultNavOptions = {
+const defaultStyle = {
+  headerTintColor: "#fff",
   headerStyle: {
     backgroundColor: Colors.primary,
   },
   headerTitleStyle: {
     fontFamily: "open-sans-bold",
   },
-  headerTintColor: "#fff",
 };
 
 const MealsNavigator = createStackNavigator(
   {
-    Categories: CategoriesScreen,
-    CategoryMeals: {
-      screen: CategoryMealsScreen,
-    },
-    MealDetails: MealDetailsScreen,
+    CategoriesScreen: CategoriesScreen,
+    CategoryMealsScreen: CategoryMealsScreen,
+    MealDetailsScreen: MealDetailsScreen,
   },
   {
-    defaultNavigationOptions: defaultNavOptions,
+    defaultNavigationOptions: defaultStyle,
   }
 );
 
-const FavsNavigator = createStackNavigator(
+const FavNavigator = createStackNavigator(
   {
-    Favorites: FavoritesScreen,
-    MealDetails: MealDetailsScreen,
+    FavoriteMealsScreen: FavoriteMealsScreen,
+    MealDetailsScreen: MealDetailsScreen,
   },
   {
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
-const MealsFavNavigator = createMaterialBottomTabNavigator(
-  {
-    Meals: {
-      screen: MealsNavigator,
-      navigationOptions: {
-        tabBarIcon: (tabInfo) => (
-          <Ionicons name="ios-restaurant" size={25} color={tabInfo.tintColor} />
-        ),
-      },
-    },
-    Favourites: {
-      screen: FavsNavigator,
-      navigationOptions: {
-        tabBarIcon: (tabInfo) => (
-          <Ionicons name="ios-star" size={25} color={tabInfo.tintColor} />
-        ),
-        tabBarBadge: 2,
-      },
-    },
-  },
-  {
-    tabBarOptions: {
-      activeTintColor: Colors.secondary,
-    },
+    defaultNavigationOptions: defaultStyle,
   }
 );
 
-const FilterNavigator = createStackNavigator(
-  {
-    FilterScreen: FiltersScreen,
-  },
-  {
-    defaultNavigationOptions: defaultNavOptions,
-  }
-);
-const MainNavigator = createDrawerNavigator(
-  {
-    MealsFav: {
-      screen: MealsFavNavigator,
-      navigationOptions: {
-        title: "Meals",
-      },
+const FavsMealsNavigator = createMaterialBottomTabNavigator({
+  MealsScreen: {
+    screen: MealsNavigator,
+    navigationOptions: {
+      tabBarIcon: () => (
+        <Ionicons name="ios-restaurant-sharp" size={24} color={Colors.secondary} />
+      ),
+      tabBarLabel: "Meals",
     },
-    Filter: FilterNavigator,
   },
-  {
-    contentOptions: {
-      activeTintColor: Colors.secondary,
-      labelStyle: {
-        fontFamily: "open-sans-bold",
-      },
+  FavoriteScreen: {
+    screen: FavNavigator,
+    navigationOptions: {
+      tabBarIcon: () => (
+        <Ionicons name="ios-star-half-outline" size={25} color={Colors.secondary} />
+      ),
+      tabBarBadge:3,
+      tabBarLabel: "Favorite",
     },
-  }
-);
+  },
+});
+
+const FilterNavigator = createStackNavigator({
+    FilterScreen:FilterScreen,
+},{
+    defaultNavigationOptions:defaultStyle
+})
+
+const MainNavigator = createDrawerNavigator({
+    MealsFavScreen:{
+        screen:FavsMealsNavigator,
+        navigationOptions:{
+            title:'Meals'
+        }
+    },
+    Filter:{
+        screen:FilterNavigator
+    }
+},{
+    contentOptions:{
+        activeTintColor:Colors.primary,
+        labelStyle:{
+            fontFamily:'open-sans-bold'
+        }
+    }
+})
+
 export default createAppContainer(MainNavigator);
