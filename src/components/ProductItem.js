@@ -1,69 +1,51 @@
 import React from "react";
-import {
-  Image,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Image, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import Card from "./Card";
 
-
-function ProductItem({ imageUrl, title, price, goToDetails,children }) {
+function ProductItem({ imageUrl, title, price, children,onViewDetails}) {
   return (
-    <View style={styles.product}>
-      <TouchableOpacity useForeground onPress={goToDetails}>
-        <View>
-          <Image source={{ uri: imageUrl }} style={styles.image} />
-          <View style={styles.details}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.price}>${price}</Text>
-          </View>
-
-          <View style={styles.buttons}>
-            {children}
-          </View>
+    <Card>
+      <TouchableOpacity style={styles.productItem} activeOpacity={0.7} onPress={onViewDetails}>
+        <Image style={styles.image} source={{ uri: imageUrl }} />
+        <View style={styles.productInfo}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.price}>${price}</Text>
         </View>
+        <View style={styles.buttonContainer}>{children}</View>
       </TouchableOpacity>
-    </View>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  product: {
-    margin: 20,
-    
-    height: 300,
-    borderRadius: 10,
+  productItem: {
     backgroundColor: "#eee",
-    justifyContent: "space-around",
-    overflow: "hidden",
+    flex: 1,
   },
   image: {
     width: "100%",
-    height: "55%",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    overflow: "hidden",
+    height: 200,
   },
-  details: {  
+  productInfo: {
+    justifyContent: "center",
+    marginVertical: 5,
     alignItems: "center",
   },
   title: {
-    fontSize: 23,
-    marginVertical: 5,
     fontFamily: "open-sans-bold",
+    fontSize:20
   },
   price: {
-    color: "#666",
-    fontSize: 20,
-    fontFamily: "open-sans",
+    color: "#bbb",
+    fontSize:20,
+    fontFamily:'open-sans-bold'
   },
-  buttons: {
+  buttonContainer: {
     flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 5,
     alignItems: "center",
-    marginHorizontal: 10,
-    justifyContent: "space-between",
-    height: "20%",
+    width: "100%",
   },
 });
 

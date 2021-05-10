@@ -1,5 +1,4 @@
-import Product from "../models/Product";
-
+import Product from '../models/Product';
 
 const PRODUCTS = [
   new Product(

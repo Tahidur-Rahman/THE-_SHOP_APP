@@ -2,55 +2,53 @@ import React from "react";
 import { Button, Text, View, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
+import Card from "../../components/Card";
 import CartItem from "../../components/CartItem";
-import Colors from "../../constants/Colors";
+import COLORS from "../../constants/COLORS";
 import { removeFromCart } from "../../store/actions/cart";
-import { orderNow } from "../../store/actions/orders";
 
-function CartScreen(props) {
+function CartScreen() {
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => {
-    const itemsArray = [];
-    for (let key in state.cart.items) {
-      itemsArray.push({
-        productId: key,
-        productTitle: state.cart.items[key].productTitle,
-        productPrice: state.cart.items[key].productPrice,
-        quantity: state.cart.items[key].quantity,
-        sum: state.cart.items[key].sum,
+    const transformedItems = [];
+    for (const key in state.cart.products) {
+      transformedItems.push({
+        id: key,
+        quantity: state.cart.products[key].quantity,
+        title: state.cart.products[key].title,
+        price: +state.cart.products[key].price,
+        sum: +state.cart.products[key].sum,
       });
     }
-    return itemsArray.sort((a, b) => (a.productId > b.productId ? 1 : -1));
+    return transformedItems.sort((a, b) => (a.id > b.id ? 1 : -1));
   });
+  console.log(cartItems);
 
   return (
     <View style={styles.screen}>
-      <View style={styles.summary}>
-        <Text style={styles.total}> Total : ${totalAmount.toFixed(2)} </Text>
-        <Button
-          title="Order Now"
-          color={Colors.primary}
-          style={styles.orderButton}
-          onPress={()=>dispatch(orderNow(cartItems,totalAmount))}
-          disabled={cartItems.length < 1}
-        />
-      </View>
+      <Card>
+        <View style={styles.total_order}>
+          <Text style={styles.total}>Total : ${totalAmount.toFixed(2)}</Text>
+          <Button
+            title="Order Now"
+            disabled={cartItems.length < 1}
+            color={COLORS.primary}
+          />
+        </View>
+      </Card>
 
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item.productId}
-        renderItem={({ item }) => {
-          return (
-            <CartItem
-              quantity={item.quantity}
-              title={item.productTitle}
-              sum={item.sum}
-              deletable
-              onRemove={() => dispatch(removeFromCart(item.productId))}
-            />
-          );
-        }}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <CartItem
+            quantity={item.quantity}
+            title={item.title}
+            sum={item.sum}
+            onDelete={() => dispatch(removeFromCart(item.id))}
+          />
+        )}
       />
     </View>
   );
@@ -59,23 +57,15 @@ function CartScreen(props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    margin: 20,
   },
-  summary: {
-    shadowColor: "black",
-    shadowOpacity: 0.9,
-    shadowRadius: 5,
-    shadowOffset: { width: 11, height: 15 },
-    elevation: 5,
+  total_order: {
     flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
-    marginVertical: 10,
-    borderRadius: 10,
-    padding: 10,
+    justifyContent: "space-around",
   },
   total: {
-    fontFamily: "open-sans",
+    fontFamily: "open-sans-bold",
+    fontSize: 22,
   },
 });
 

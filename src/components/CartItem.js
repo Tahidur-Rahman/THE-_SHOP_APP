@@ -1,60 +1,57 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
+import ProductDetails from "../screens/shop/ProductDetails";
+import Card from "./Card";
 
-function CartItem({ quantity, title, sum, onRemove, deletable }) {
+function CartItem({ quantity, title, sum, onDelete }) {
+  const [show, setshow] = useState(false);
   return (
-    <View style={styles.item}>
-      <View style={styles.infoLeft}>
-        <Text style={styles.info}>{quantity} </Text>
-        <Text style={styles.info}>{title}</Text>
-      </View>
-
-      <View style={styles.infoRight}>
-        <Text style={styles.sum}>${sum}</Text>
-        {deletable && (
+    <Card>
+      <View style={styles.cartItem}>
+        <View style={styles.left}>
+          <Text style={{ fontFamily: "open-sans-bold" }}>{quantity}</Text>
+          <Text style={{ fontFamily: "open-sans-bold" }}>{title}</Text>
+        </View>
+        <View style={styles.right}>
+          <Text style={{ fontFamily: "open-sans-bold" }}>
+            ${sum.toFixed(2)}
+          </Text>
           <Ionicons
-            name="md-trash-bin"
-            size={24}
+            name="ios-trash-bin-outline"
+            size={25}
+            onPress={onDelete}
             color="red"
-            onPress={onRemove}
           />
-        )}
+        </View>
       </View>
-    </View>
+      <Button
+        title={show ? "Hide Details" : "Show Details"}
+        onPress={() => setshow(!show)}
+        
+      />
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  item: {
+  cartItem: {
     flex: 1,
+    margin: 10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 5,
-    marginVertical: 5,
-    borderRadius: 5,
-    backgroundColor: "#ddd",
-    margin: 5,
+    justifyContent: "space-around",
   },
-  infoLeft: {
-    flex: 1,
+  left: {
     justifyContent: "center",
     alignItems: "center",
   },
-  info: {
-    fontFamily: "open-sans-bold",
-  },
-  infoRight: {
-    flex: 1,
+  right: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  sum: {
-    fontFamily: "open-sans",
-    fontSize: 20,
-  },
+    width: "30%",
+  }
 });
 
 export default CartItem;
