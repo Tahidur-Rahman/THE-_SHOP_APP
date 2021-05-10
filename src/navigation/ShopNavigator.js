@@ -6,6 +6,8 @@ import { createAppContainer } from "react-navigation";
 import { Ionicons } from "@expo/vector-icons";
 import ProductDetails from "../screens/shop/ProductDetails";
 import CartScreen from "../screens/shop/CartScreen";
+import OrdersScreen from "../screens/shop/OrdersScreen";
+import { createDrawerNavigator } from "react-navigation-drawer";
 
 const defNavOptions = {
   headerTintColor: "#fff",
@@ -21,7 +23,7 @@ const ProductsNavigator = createStackNavigator(
   {
     ProductOverview: ShopOverviewScreen,
     ProductDetails: ProductDetails,
-    Cart : CartScreen,
+    Cart: CartScreen,
   },
   {
     navigationOptions: {
@@ -37,4 +39,34 @@ const ProductsNavigator = createStackNavigator(
   }
 );
 
-export default createAppContainer(ProductsNavigator);
+const OrdersNavigator = createStackNavigator(
+  {
+    Orders: OrdersScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (drawerConfig) => (
+        <Ionicons
+          name="ios-list-circle-outline"
+          size={25}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions:defNavOptions
+  }
+);
+
+const ShopNavigator = createDrawerNavigator(
+  {
+    ProductsNavigator: ProductsNavigator,
+    OrdersNavigator: OrdersNavigator,
+  },
+  {
+    contentOptions: {
+      activeTintColor: COLORS.primary,
+    },
+  }
+);
+
+export default createAppContainer(ShopNavigator);

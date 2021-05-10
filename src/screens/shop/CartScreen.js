@@ -6,6 +6,7 @@ import Card from "../../components/Card";
 import CartItem from "../../components/CartItem";
 import COLORS from "../../constants/COLORS";
 import { removeFromCart } from "../../store/actions/cart";
+import orderNow from "../../store/actions/order";
 
 function CartScreen() {
   const totalAmount = useSelector((state) => state.cart.totalAmount);
@@ -34,22 +35,23 @@ function CartScreen() {
             title="Order Now"
             disabled={cartItems.length < 1}
             color={COLORS.primary}
+            onPress={() => dispatch(orderNow(cartItems, totalAmount))}
           />
         </View>
-      </Card>
 
-      <FlatList
-        data={cartItems}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <CartItem
-            quantity={item.quantity}
-            title={item.title}
-            sum={item.sum}
-            onDelete={() => dispatch(removeFromCart(item.id))}
-          />
-        )}
-      />
+        <FlatList
+          data={cartItems}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CartItem
+              quantity={item.quantity}
+              title={item.title}
+              sum={item.sum}
+              onDelete={() => dispatch(removeFromCart(item.id))}
+            />
+          )}
+        />
+      </Card>
     </View>
   );
 }

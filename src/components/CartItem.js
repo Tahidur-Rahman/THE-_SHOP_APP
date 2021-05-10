@@ -1,11 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
-import ProductDetails from "../screens/shop/ProductDetails";
+import React from "react";
+import {  StyleSheet, Text, View } from "react-native";
 import Card from "./Card";
 
 function CartItem({ quantity, title, sum, onDelete }) {
-  const [show, setshow] = useState(false);
   return (
     <Card>
       <View style={styles.cartItem}>
@@ -25,11 +23,7 @@ function CartItem({ quantity, title, sum, onDelete }) {
           />
         </View>
       </View>
-      <Button
-        title={show ? "Hide Details" : "Show Details"}
-        onPress={() => setshow(!show)}
-        
-      />
+     
     </Card>
   );
 }

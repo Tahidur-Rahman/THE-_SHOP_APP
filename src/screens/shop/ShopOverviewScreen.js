@@ -51,7 +51,7 @@ ShopOverviewScreen.navigationOptions = ({ navigation }) => {
       <Ionicons
         name="ios-menu-outline"
         size={25}
-        onPress={() => {}}
+        onPress={() => navigation.toggleDrawer()}
         color="#fff"
         style={{ marginLeft: 20 }}
       />
