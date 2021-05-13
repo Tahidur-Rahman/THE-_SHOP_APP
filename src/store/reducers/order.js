@@ -1,4 +1,4 @@
-import { ORDER_NOW } from "../actions/order";
+import { ORDER_NOW, SET_ORDER } from "../actions/order";
 import OrderItem from "../../models/OrderItem";
 
 const initialState = {
@@ -7,15 +7,18 @@ const initialState = {
 
 const orderReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_ORDER:
+      return { orders: action.orders };
     case ORDER_NOW:
-      const date = new Date()
       const newOrder = new OrderItem(
-        date.toString(),
+        action.orderedData.id,
         action.orderedData.items,
         action.orderedData.totalAmount,
-        date.toLocaleDateString() +' '+ date.toLocaleTimeString()
+        action.orderedData.date.toLocaleDateString() +
+          " " +
+          action.orderedData.date.toLocaleTimeString()
       );
-      return {...state,orders : state.orders.concat(newOrder)}
+      return { ...state, orders: state.orders.concat(newOrder) };
 
     default:
       return state;

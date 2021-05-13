@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
-import { combineReducers, createStore } from "redux";
+import { combineReducers, createStore,applyMiddleware } from "redux";
 import productsReducer from "./src/store/reducers/products";
 import cartReducer from "./src/store/reducers/cart";
 import ShopNavigator from "./src/navigation/ShopNavigator";
 import { Provider } from "react-redux";
 import orderReducer from "./src/store/reducers/order";
+import ReduxThunk from 'redux-thunk'
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -21,7 +22,7 @@ const rootReducer = combineReducers({
   orders: orderReducer
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer,applyMiddleware(ReduxThunk));
 function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
 
